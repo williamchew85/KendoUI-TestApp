@@ -13,19 +13,25 @@
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" src="phonegap.js"></script>
     <script>
+	/*
 		var jQr = jQuery.noConflict();
 		jQr(document).ready(function(e) {
            RunTwitter();
-        });
+		  
+        });*/
+		
+		document.addEventListener('deviceready', onDeviceReady, false);
 		
     
 		
 		// Global InAppBrowser reference
+		var ref = null;
     	var iabRef = null;
 
 		// Inject our custom JavaScript into the InAppBrowser window
 		//
 		function execTweetScript() {
+			console.log("Script load start");
 			/*
 			iabRef.executeScript({
 				code: "!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'//platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');"
@@ -34,9 +40,11 @@
 			});*/
 			
 			iabRef.executeScript({file: "js/tweets.js"}, function(){
-				alert("Script Injected");
+				console.log("Script Injected");
 			});
 		}
+		
+		
 	
 		function iabClose(event) {
 			 iabRef.removeEventListener('loadstart', execTweetScript);
@@ -45,10 +53,18 @@
 	
 		// Cordova is ready
 		//
-		function RunTwitter() {
+		function onDeviceReady() {
+			console.log("onDeviceReady");
+			
 			 iabRef = window.open('tweets.html', '_blank', 'location=off');
 			 iabRef.addEventListener('loadstart', execTweetScript);
 			 iabRef.addEventListener('exit', iabClose);
+			 /*
+			 var ref = window.open('http://apache.org', '_blank', 'location=yes');
+			 ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
+			 ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
+			 ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
+			 ref.addEventListener('exit', function(event) { alert(event.type); });*/
 		}
    	</script>
     <link href="styles/kendo.common.min.css" rel="stylesheet" />
@@ -180,7 +196,7 @@
             </a><a href="#tabstrip-sales" data-icon="history">Sales
             </a><a href="#tabstrip-rating" data-icon="favorites">Rating
             </a><a href="#tabstrip-settings" data-icon="settings">Settings
-            </a><a href="#tabstrip-twitter" data-icon="twitter" onMouseDown="javascript:RunTwitter();">Twitter</a>
+            </a><a href="#tabstrip-twitter" data-icon="twitter" onMouseDown="javascript:onDeviceReady();">Twitter</a>
         </div>
     </div>
 </div>
