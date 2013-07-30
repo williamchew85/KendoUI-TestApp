@@ -6,14 +6,40 @@
     <script src="js/jquery.min.js"></script>
     <script src="js/kendo.mobile.min.js"></script>
     <script src="js/console.js"></script>
+    <!--<script type="text/javascript" src="js/index.js"></script>-->
+    <script type="text/javascript" src="phonegap.js"></script>
     <script>
 		var jQr = jQuery.noConflict();
 		jQr(document).ready(function(e) {
-           execTweetScript();
+           RunTwitter();
         });
 		
-    	function execTweetScript(){
-			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+    
+		
+		// Global InAppBrowser reference
+    	var iabRef = null;
+
+		// Inject our custom JavaScript into the InAppBrowser window
+		//
+		function execTweetScript() {
+			iabRef.executeScript({
+				code: "!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'//platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');"
+			}, function() {
+				alert("Script Injected");
+			});
+		}
+	
+		function iabClose(event) {
+			 iabRef.removeEventListener('loadstop', replaceHeaderImage);
+			 iabRef.removeEventListener('exit', iabClose);
+		}
+	
+		// Cordova is ready
+		//
+		function RunTwitter() {
+			 iabRef = window.open('http://apache.org', '_blank', 'location=yes');
+			 iabRef.addEventListener('loadstop', execTweetScript);
+			 iabRef.addEventListener('exit', iabClose);
 		}
    	</script>
     <link href="styles/kendo.common.min.css" rel="stylesheet" />
@@ -145,7 +171,7 @@
             </a><a href="#tabstrip-sales" data-icon="history">Sales
             </a><a href="#tabstrip-rating" data-icon="favorites">Rating
             </a><a href="#tabstrip-settings" data-icon="settings">Settings
-            </a><a href="#tabstrip-twitter" data-icon="twitter" onMouseDown="javascript:execTweetScript();">Twitter</a>
+            </a><a href="#tabstrip-twitter" data-icon="twitter" onMouseDown="javascript:RunTwitter();">Twitter</a>
         </div>
     </div>
 </div>
