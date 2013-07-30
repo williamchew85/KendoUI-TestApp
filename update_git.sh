@@ -1,3 +1,4 @@
+ssh -T git@github.com
 git init
 git add *
 git commit -m "First Version"
