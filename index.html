@@ -5,43 +5,45 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" >
     <meta charset="utf-8" />
     <meta name="format-detection" content="telephone=no" />
-    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+    <!--<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />-->
     <script src="js/jquery.min.js"></script>
     <script src="js/kendo.mobile.min.js"></script>
     <script src="js/console.js"></script>
     <!--<script type="text/javascript" src="js/index.js"></script>-->
-    <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
     <script type="text/javascript" src="phonegap.js"></script>
     <script>
-	/*
+	
 		var jQr = jQuery.noConflict();
 		jQr(document).ready(function(e) {
-           RunTwitter();
-		  
-        });*/
+          // onDeviceReady();
+		  /*
+			var iabRef = null;
+			jQr("#tweet").bind("mousedown", function(){
+				RunTwitter();
+			});
+			*/
+			var doc_height = jQr(window).height();
+			doc_height -= 85;
+			var doc_width = jQr(window).width();
+			jQr(".twitter-timeline").attr("height", doc_height);
+			jQr(".twitter-timeline").attr("width", doc_width);
+			
+			jQr("#runTwitter").on("touchstart click", function(){
+				runTwitterScript();
+			})
+        });
 		
+		/*
 		document.addEventListener('deviceready', onDeviceReady, false);
-		
-    
+
 		
 		// Global InAppBrowser reference
-		var ref = null;
-    	var iabRef = null;
+    	
 
 		// Inject our custom JavaScript into the InAppBrowser window
 		//
 		function execTweetScript() {
-			console.log("Script load start");
-			/*
-			iabRef.executeScript({
-				code: "!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'//platform.twitter.com/widgets.js'; fjs.parentNode.insertBefore(js,fjs);}}(document,'script','twitter-wjs');"
-			}, function() {
-				alert("Script Injected");
-			});*/
-			
-			iabRef.executeScript({file: "js/tweets.js"}, function(){
-				console.log("Script Injected");
-			});
+			iabRef.executeScript({file: "js/tweets.js"}, function(){});
 		}
 		
 		
@@ -53,29 +55,27 @@
 	
 		// Cordova is ready
 		//
-		function onDeviceReady() {
-			console.log("onDeviceReady");
+		function RunTwitter() {
+			alert("RunTwitter");
 			
 			 iabRef = window.open('tweets.html', '_blank', 'location=off');
 			 iabRef.addEventListener('loadstart', execTweetScript);
 			 iabRef.addEventListener('exit', iabClose);
-			 /*
-			 var ref = window.open('http://apache.org', '_blank', 'location=yes');
-			 ref.addEventListener('loadstart', function(event) { alert('start: ' + event.url); });
-			 ref.addEventListener('loadstop', function(event) { alert('stop: ' + event.url); });
-			 ref.addEventListener('loaderror', function(event) { alert('error: ' + event.message); });
-			 ref.addEventListener('exit', function(event) { alert(event.type); });*/
 		}
+		*/
+		
+		function runTwitterScript(){
+			alert("prepare to trigger!");
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
+		}
+		
+		
    	</script>
     <link href="styles/kendo.common.min.css" rel="stylesheet" />
     <link href="styles/kendo.mobile.all.min.css" rel="stylesheet" />
 </head>
 <body>
     <a href="../index.html">Back</a>
-<div data-role="view" id="tabstrip-twitter" data-title="Twitter" data-layout="mobile-tabstrip">
-
-    <a class="twitter-timeline" href="https://twitter.com/MyNewConference" data-widget-id="358115480298467328">Tweets by @MyNewConference</a>
-</div>
 <div data-role="view" id="tabstrip-profile" data-title="Profile" data-layout="mobile-tabstrip">
     <ul data-role="listview" data-style="inset" data-type="group">
         <li>Profile
@@ -177,7 +177,10 @@
     </ul>
 </div>
 
-
+<div data-role="view" id="tabstrip-twitter" data-title="Twitter" data-layout="mobile-tabstrip">
+    <script></script>
+<a class="twitter-timeline" href="https://twitter.com/MyNewConference" data-widget-id="358115480298467328">Tweets by @MyNewConference</a>
+</div>
 
 <div data-role="layout" data-id="mobile-tabstrip">
     <header data-role="header">
@@ -196,7 +199,8 @@
             </a><a href="#tabstrip-sales" data-icon="history">Sales
             </a><a href="#tabstrip-rating" data-icon="favorites">Rating
             </a><a href="#tabstrip-settings" data-icon="settings">Settings
-            </a><a href="#tabstrip-twitter" data-icon="twitter" onMouseDown="javascript:onDeviceReady();">Twitter</a>
+            </a><a href="#tabstrip-twitter" data-icon="settings" id="runTwitter">Twitter
+            </a><a href="tweets.html" data-rel="external" target="_blank" data-icon="twitter">Twitter</a>
         </div>
     </div>
 </div>
