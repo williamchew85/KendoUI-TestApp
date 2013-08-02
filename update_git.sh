@@ -7,3 +7,5 @@ git remote rm testapp
 git remote add testapp git@github.com:williamchew85/KendoUI_TestApp.git
 git pull testapp master
 git push testapp master
+git commit -am "A file was deleted"
+git push testapp master
